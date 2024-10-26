@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Post\StoreRequest;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,7 @@ class PostController extends Controller
     {
         $post = Post::find(3);
 
-        $post->delete();
+        //$post->delete();
 
 
         /*$post->update(
@@ -40,49 +42,41 @@ class PostController extends Controller
         );*/
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+        $categories = Category::get();
+        //$categories = Category::pluck('id', 'title');
+        //dd($categories);
+        return view('dashboard.post.create')->with('categories', $categories); //Retorna al formulario
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(StoreRequest $request)
     {
-        //
+        Post::create($request->validated());
+        //Post::create($request->all());
+        //return to_route('post.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Post $post)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Post $post)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Post $post)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Post $post)
     {
         //
