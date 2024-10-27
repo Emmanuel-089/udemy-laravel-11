@@ -7,6 +7,7 @@
     <title>Dashboard</title>
 </head>
 <body>
+    <p>Encabezado</p>
     @yield('content')
     <section>
         @yield('morecontent')

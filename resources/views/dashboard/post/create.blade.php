@@ -2,12 +2,8 @@
 
 @section('content')
 
-    @if ($errors->any())
-        @foreach ($errors->all() as $e)
-            <div>{{$e}}</div>
-        @endforeach
-        
-    @endif
+    @include('dashboard/fragment/errors-form')
+
     <form action="{{route('post.store')}}" method="post">
         @csrf
         <label for="">title</label>
@@ -23,6 +19,8 @@
 
         
         <select name="category_id" >
+
+            //----- como ya hicimos un get, nos trae todas las categorías, y nadamas las ponemos en un option con un foreach------//
             @foreach ($categories as $c)
                 <option value="{{$c->id}}">{{$c->title}}</option>
             @endforeach
