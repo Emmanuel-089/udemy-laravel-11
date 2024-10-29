@@ -39,12 +39,17 @@
 
                 </td>
                 <td>
-                    {{ $p->categories->title  }}
+                    {{ $p->category->title  }}
                 </td>
 
                 <td>
                     <a href="{{route('post.edit',$p->id)}}">Editar</a>
                     <a href="{{route('post.show',$p->id)}}">show</a>
+                    <form action="{{route('post.destroy',$p)}}" method="POST">
+                        @method('DELETE')
+                        @csrf{{--TOKEN--}}
+                        <button type="submit">Eliminar</button>
+                    </form>
                 </td>
                 
 

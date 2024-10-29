@@ -12,7 +12,7 @@ class Post extends Model
     protected $fillable = ['title', 'slug', 'content', 'category_id', 'description', 'posted', 'image'];
 
     //-----Relacion Eloquent ORM para hacer el join con una tabla
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
                 //----belongsTo es para decir Uno a uno

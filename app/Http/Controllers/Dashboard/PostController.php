@@ -14,7 +14,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::with('categories')->paginate(2);//--------------paginate es para poner la cantidad de datos en cada página
+        $posts = Post::with('category')->paginate(2);//--------------paginate es para poner la cantidad de datos en cada página
                     //el With categories es para hacer referencia o JOIN con esa tabla
         return view('dashboard.post.index')->with('posts',$posts);
 
@@ -46,10 +46,11 @@ class PostController extends Controller
 
     public function create()
     {
-        $categories = Category::get();//---------get para traer todos los registros, ya no necesitamos hacer una consulta SQL
-        //$categories = Category::pluck('id', 'title');
+        //$categories = Category::get();//---------get para traer todos los registros, ya no necesitamos hacer una consulta SQL
+        $categories = Category::pluck('title','id');//---pluck para traer solo title y id(title porque así se llama la categoría y id por el join)
         //dd($categories);
-        return view('dashboard.post.create')->with('categories', $categories); //Retorna al formulario
+        $post=new Post();
+        return view('dashboard.post.create', compact('categories','post'))->with('category', $categories); //Retorna al formulario
     }
 
 
@@ -63,24 +64,35 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        //
+
+        return view('dashboard/post/show',['post'=>$post]);
     }
 
 //---------------------------------------------------------------------------------
     public function edit(Post $post)
     {
-        $post->load('categories'); // Cargar la relación de categoría para el post
-        $categories = Category::pluck('id','title');//------el pluck sirve para traer solo ciertos atributos de la tabla, osea si no quieres traer todo
+        $post->load('category'); // Cargar la relación de categoría para el post
+        $categories = Category::pluck('title','id');//------el pluck sirve para traer solo ciertos atributos de la tabla, osea si no quieres traer todo
         
         return view('dashboard.post.edit',compact('categories','post'));
     }
 
     public function update(PutRequest $request, Post $post)
     {
-        $validatedData = $request->validated();
-
+        $data = $request->validated();
+        
+        //Campo para subir archivos
+        //primero se carga la validación de la imagen
+            //Y despues con el if(), se pregunta si existe una imagen cargada o no, ya que es opcional---- recordemos que 'image' ya lo 
+                                                                                                        //tenemos en nuestra base de datos
+        if(isset($data['image'])){        
+            $data['image']=$filename=time().'.'.$data['image']->extension();//esta linea es la forma que va a tomar la imagen que se suba
+                                // a la base de datos, en este caso (filename=time(052928102024)->la hora )
+                                        //   '.' se le pone porque la imagen necesita la extension de .jpg y ->extension es la extención de la imagen(jpeg, png)                                                                       
+            $request->image->move(public_path('uploads/posts'),$filename);
+        }
         // Actualiza el post con los datos validados
-        $post->update($validatedData);
+        $post->update($data);
         return to_route('post.index');
     }
 
@@ -94,9 +106,10 @@ public function edit(Post $post)
 
 */
 //---------------------------------------------------------------------------------
-
+//   Función Eliminar
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return to_route('post.index');
     }
 }
