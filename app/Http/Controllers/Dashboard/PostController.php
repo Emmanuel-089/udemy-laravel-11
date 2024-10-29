@@ -18,29 +18,6 @@ class PostController extends Controller
                     //el With categories es para hacer referencia o JOIN con esa tabla
         return view('dashboard.post.index')->with('posts',$posts);
 
-        //$post->delete();
-
-
-        /*$post->update(
-            [
-                'title' => 'test title NEW',
-                'slug' => 'test slug',
-                'content' => 'test content',
-                'image' => 'test image',
-            ]
-        );*/
-
-        /*Post::create(
-            [
-                'title' => 'test title 33',
-                'slug' => 'test slug 223',
-                'content' => 'test content 223',
-                'category_id' => 1,
-                'description' => 'test description 23',
-                'posted' => 'not',
-                'image' => 'test image',
-            ]
-        );*/
     }
 
 
